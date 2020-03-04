@@ -1,0 +1,27 @@
+server:
+  port: 8888
+  context-path: /
+spring:
+  application:
+    name: service-config
+  profiles:
+    active: native
+  cloud:
+    config:
+      server:
+        native:
+          search-location: classpath:/config
+security:
+  basic:
+    enabled: false
+
+eureka:
+  instance:
+    preferIpAddress: false  #不以具体的ip地址来注册而使用默认的服务实例名
+    leaseRenewalIntervalInSeconds: 5
+    leaseExpirationDurationInSeconds: 5
+  client:
+    serviceUrl:
+      defaultZone: ${eureka.uri:http://localhost:8761/eureka}
+    registryFetchIntervalSeconds: 5
+          

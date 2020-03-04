@@ -1,0 +1,9 @@
+spring:
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: service-config
+      name: application-flowable
+      profile: dev
+      label: master

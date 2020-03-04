@@ -1,0 +1,82 @@
+server:
+  port: 6001
+mybatis:
+  config-location: "classpath:mybatis/mybatis.cfg.xml"   #mybatis配置文件所在路径
+  mapper-locations:
+    - "classpath:mybatis/mapper/**/*.xml"      #mapper映射文件
+  type-aliases-package: com.elling.book.sys.entity
+
+spring:
+  application:
+    name: microservicecloud-zuul    #微服务的名称
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 1MB
+      max-request-size: 100MB
+      max-file-size: 100MB
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver  #mysql的驱动包
+    type: com.alibaba.druid.pool.DruidDataSource   #当前数据源操作类型
+    url: "jdbc:mysql://127.0.0.1:3306/emaster?useUnicode=true&characterEncoding=utf-8"
+    username: root
+    password: cyymysql123.
+    dbcp2:
+      initial-size: 10      #初始化连接数
+      max-total: 5          #最大连接数
+      max-wait-millis: 200  #等候连接获取的最大超时时间
+      min-idle: 5           #数据库连接池的最小维持连接数
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+  redis:
+    database: 0
+    host: 134.53.83.23
+    port: 6379
+    password:     #密码（默认为空）
+    timeout: 6000ms  #连接超时时长（毫秒）
+    jedis:
+      pool:
+        max-active: 1000   #连接池最大连接数（使用负值表示没有限制）
+        max-wait: -1ms     #连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-idle: 10       #连接池中最大的空闲连接
+        min-idle: 5        #连接池中最小的空闲连接
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    instance:
+    instance-id: microservice-zuul6001      #自定义服务名称信息
+    prefer-ip-address: true                 #访问路径可以显示ip地址
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000
+ribbon:
+  ReadTimeout: 60000
+  ConnectTimeout: 60000
+feign:
+  client:
+    config:
+      default:
+        read-timeout: 60000   #处理超时时间设置
+        connect-timeout: 60000
+zuul:
+  ignoredServices: '*'  #忽略所有未配置的service
+  host:
+    connect-timeout-millis: 40000
+    socket-timeout-millis: 40000
+  semaphore:
+    max-semaphores: 100
+  routes:
+    api-sys:
+      path: /api-sys/**
+      service-id: microservicecloud-sys
+    api-flowable:
+      path: /api-flowable/**
+      service-id: microservicecloud-flowable

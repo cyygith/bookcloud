@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elling.book.flowable.dao.TaskQueryDao">
+	<select id="getProcessByMyStart" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT DISTINCT
+			P.ID_ AS processInstanceId,
+			P.PROC_DEF_ID_ AS processDefinitionId,
+			D.NAME_ AS processDefinitionName,
+			D.KEY_ AS processDefKey,
+			P.BUSINESS_KEY_ AS businessId,
+			DATE_FORMAT (P.START_TIME_,'%Y-%m-%d %H:%i:%S') AS startTime,
+			DATE_FORMAT (P.END_TIME_,'%Y-%m-%d %H:%i:%S') AS endTime,
+			U.ID_ AS starterId,
+			U.FIRST_ AS starter,
+			P.NAME_ AS formName,
+			P.TENANT_ID_ AS systemSn
+		FROM
+			ACT_HI_PROCINST P
+		INNER JOIN ACT_RE_PROCDEF D ON P.PROC_DEF_ID_ = D.ID_
+		LEFT JOIN ACT_ID_USER U ON P.START_USER_ID_ = U.ID_
+		<where>
+			<if test="query.userId!=null and query.userId!=''">
+				AND P.START_USER_ID_ = #{query.userId}
+			</if>
+			<if test="query.userName!=null and query.userName!=''">
+				AND U.FIRST_ LIKE CONCAT('%',#{query.userName},'%')
+			</if>
+			<if test="query.formName!=null and query.formName!=''">
+				AND P.NAME_ LIKE CONCAT('%',#{query.formName},'%')
+			</if>
+		</where>
+		ORDER BY startTime DESC
+		limit #{page.start},#{page.limit}
+	</select>
+	<select id="getProcessByMyStartCount" resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM (
+			SELECT DISTINCT
+				P.ID_ AS processInstanceId,
+				P.PROC_DEF_ID_ AS processDefinitionId,
+				D.NAME_ AS processDefinitionName,
+				D.KEY_ AS processDefKey,
+				P.BUSINESS_KEY_ AS businessId,
+				DATE_FORMAT (P.START_TIME_,'%Y-%m-%d %H:%i:%S') AS startTime,
+				DATE_FORMAT (P.END_TIME_,'%Y-%m-%d %H:%i:%S') AS endTime,
+				U.ID_ AS starterId,
+				U.FIRST_ AS starter,
+				P.NAME_ AS formName,
+				P.TENANT_ID_ AS systemSn
+			FROM
+				ACT_HI_PROCINST P
+			INNER JOIN ACT_RE_PROCDEF D ON P.PROC_DEF_ID_ = D.ID_
+			LEFT JOIN ACT_ID_USER U ON P.START_USER_ID_ = U.ID_
+			<where>
+				<if test="query.userId!=null and query.userId!=''">
+					AND P.START_USER_ID_ = #{query.userId}
+				</if>
+				<if test="query.userName!=null and query.userName!=''">
+					AND U.FIRST_ LIKE CONCAT('%',#{query.userName},'%')
+				</if>
+				<if test="query.formName!=null and query.formName!=''">
+					AND P.NAME_ LIKE CONCAT('%',#{query.formName},'%')
+				</if>
+			</where>
+			) A
+	</select>
+	<select id="getDoneListByCondition" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT DISTINCT
+            T.ID_ AS taskId,
+            T.NAME_ AS taskName,
+            U.FIRST_ AS approver,
+            U.ID_ AS approverId,
+            P.NAME_ AS formName,
+            P.BUSINESS_KEY_ AS businessId,
+            P.PROC_INST_ID_ AS processInstanceId,
+            P.TENANT_ID_ as systemSn,
+            DATE_FORMAT (T.START_TIME_,'%Y-%m-%d %H:%i:%S') AS startTime,
+			DATE_FORMAT (T.END_TIME_,'%Y-%m-%d %H:%i:%S') AS endTime,
+			T.DURATION_ AS costTime
+        FROM
+            ACT_HI_TASKINST T
+        LEFT JOIN ACT_ID_USER U ON T.ASSIGNEE_ = U.ID_
+        LEFT JOIN ACT_HI_PROCINST P ON T.PROC_INST_ID_ = P.PROC_INST_ID_
+        WHERE
+            T.END_TIME_ IS NOT NULL
+            <if test="query.userId!=null and query.userId!=''">
+		        AND T.ASSIGNEE_ = #{userId}
+            </if>
+			<if test="query.processDefId!=null and query.processDefId!=''">
+				AND T.PROC_DEF_ID_ LIKE CONCAT('%',#{query.processDefId},'%')
+			</if>
+			<if test="query.processId!=null and query.processId!=''">
+				AND T.PROC_INST_ID_ LIKE CONCAT('%',#{query.processId},'%')
+			</if>
+		ORDER BY startTime DESC
+		limit #{page.start},#{page.limit}
+	</select>
+	<select id="getDoneListByConditionCount" resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM (
+			SELECT DISTINCT
+	            T.ID_ AS taskId,
+	            T.NAME_ AS taskName,
+	            U.FIRST_ AS approver,
+	            U.ID_ AS approverId,
+	            P.NAME_ AS formName,
+	            P.BUSINESS_KEY_ AS businessId,
+	            P.PROC_INST_ID_ AS processInstanceId,
+	            P.TENANT_ID_ as systemSn,
+	            DATE_FORMAT (T.START_TIME_,'%Y-%m-%d %H:%i:%S') AS startTime,
+				DATE_FORMAT (T.END_TIME_,'%Y-%m-%d %H:%i:%S') AS endTime,
+				T.DURATION_ AS costTime
+	        FROM
+	            ACT_HI_TASKINST T
+	        LEFT JOIN ACT_ID_USER U ON T.ASSIGNEE_ = U.ID_
+	        LEFT JOIN ACT_HI_PROCINST P ON T.PROC_INST_ID_ = P.PROC_INST_ID_
+	        WHERE
+	            T.END_TIME_ IS NOT NULL
+	            <if test="query.userId!=null and query.userId!=''">
+			        AND T.ASSIGNEE_ = #{userId}
+	            </if>
+				<if test="query.processDefId!=null and query.processDefId!=''">
+					AND T.PROC_DEF_ID_ LIKE CONCAT('%',#{query.processDefId},'%')
+				</if>
+				<if test="query.processId!=null and query.processId!=''">
+					AND T.PROC_INST_ID_ LIKE CONCAT('%',#{query.processId},'%')
+				</if>
+			) D
+	</select>
+	<select id="getTodoListByUserIdCondition" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT DISTINCT
+			T.ID_ AS taskId,
+			T.NAME_ AS taskName,
+			T.FORM_KEY_ AS formKey,
+			E.BUSINESS_KEY_ AS businessId,
+			E.PROC_INST_ID_ AS processInstanceId,
+			DATE_FORMAT (T.CREATE_TIME_,'%Y-%m-%d %H:%i:%S') AS startTime,
+			E.NAME_ AS formName,
+			E.TENANT_ID_ AS systemSn,
+			T.ASSIGNEE_ AS assignee
+		FROM
+			ACT_RU_TASK T
+		INNER JOIN ACT_RU_EXECUTION E ON T.PROC_INST_ID_ = E.PROC_INST_ID_
+		LEFT JOIN ACT_RU_IDENTITYLINK I ON I.TASK_ID_ = T.ID_
+		WHERE
+			E.BUSINESS_KEY_ IS NOT NULL
+			<if test="query.processDefId!=null and query.processDefId!=''">
+				AND T.PROC_DEF_ID_ LIKE CONCAT('%',#{query.processDefId},'%')
+			</if>
+			AND (
+				T.ASSIGNEE_ = #{query.userId}
+				OR (
+					T.ASSIGNEE_ IN (
+						SELECT
+							G.GROUP_ID_
+						FROM
+							ACT_ID_MEMBERSHIP G
+						WHERE
+							G.USER_ID_ = #{query.userId}
+					)
+				)
+				OR (
+					(
+						T.ASSIGNEE_ IS NULL
+						OR T.ASSIGNEE_ = ''
+					)
+					AND (
+						I.USER_ID_ = #{query.userId}
+						OR I.GROUP_ID_ IN (
+							SELECT
+								G.GROUP_ID_
+							FROM
+								ACT_ID_MEMBERSHIP G
+							WHERE
+								G.USER_ID_ = #{query.userId}
+						)
+					)
+				)
+			)
+		ORDER BY startTime DESC
+		limit #{page.start},#{page.limit}
+	</select>
+	<select id="getTodoListByUserIdConditionCount" resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM (
+			SELECT DISTINCT
+				T.ID_ AS taskId,
+				T.NAME_ AS taskName,
+				T.FORM_KEY_ AS formKey,
+				E.BUSINESS_KEY_ AS businessId,
+				E.PROC_INST_ID_ AS processInstanceId,
+				DATE_FORMAT (T.CREATE_TIME_,'%Y-%m-%d %H:%i:%S') AS startTime,
+				E.NAME_ AS formName,
+				E.TENANT_ID_ AS systemSn,
+				T.ASSIGNEE_ AS assignee
+			FROM
+				ACT_RU_TASK T
+			INNER JOIN ACT_RU_EXECUTION E ON T.PROC_INST_ID_ = E.PROC_INST_ID_
+			LEFT JOIN ACT_RU_IDENTITYLINK I ON I.TASK_ID_ = T.ID_
+			WHERE
+				E.BUSINESS_KEY_ IS NOT NULL
+				<if test="query.processDefId!=null and query.processDefId!=''">
+					AND T.PROC_DEF_ID_ LIKE CONCAT('%',#{query.processDefId},'%')
+				</if>
+				AND (
+					T.ASSIGNEE_ = #{query.userId}
+					OR (
+						T.ASSIGNEE_ IN (
+							SELECT
+								G.GROUP_ID_
+							FROM
+								ACT_ID_MEMBERSHIP G
+							WHERE
+								G.USER_ID_ = #{query.userId}
+						)
+					)
+					OR (
+						(
+							T.ASSIGNEE_ IS NULL
+							OR T.ASSIGNEE_ = ''
+						)
+						AND (
+							I.USER_ID_ = #{query.userId}
+							OR I.GROUP_ID_ IN (
+								SELECT
+									G.GROUP_ID_
+								FROM
+									ACT_ID_MEMBERSHIP G
+								WHERE
+									G.USER_ID_ = #{query.userId}
+							)
+						)
+					)
+				)
+			) D
+	</select>
+</mapper>

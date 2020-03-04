@@ -1,0 +1,27 @@
+##公共配置
+spring:
+  application:
+    name: service-registry
+  profiles:
+    #服务启动时指定profiles配置使用单机配置或者集群配置
+    active: native
+##单机注册中心配置
+#spring:
+#  profiles: native
+server:
+  port: 8761
+info:
+  name: ${spring.application.name}
+eureka:
+  server:
+    enableSelfPreservation: false
+    evictionIntervalTimerInMs: 5000
+  instance:
+    hostname: localhost
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+  
+  

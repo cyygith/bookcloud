@@ -1,0 +1,103 @@
+Manifest-Version: 1.0
+Built-By: Administrator
+Class-Path: lib/hamcrest-core-1.3.jar lib/spring-cloud-netflix-eureka-
+ server-2.1.1.RELEASE.jar lib/spring-boot-starter-freemarker-2.1.4.REL
+ EASE.jar lib/freemarker-2.3.28.jar lib/spring-cloud-commons-2.1.1.REL
+ EASE.jar lib/spring-security-crypto-5.1.5.RELEASE.jar lib/spring-clou
+ d-netflix-hystrix-2.1.1.RELEASE.jar lib/spring-boot-starter-aop-2.1.4
+ .RELEASE.jar lib/aspectjweaver-1.9.2.jar lib/spring-cloud-netflix-eur
+ eka-client-2.1.1.RELEASE.jar lib/eureka-client-1.9.8.jar lib/jettison
+ -1.3.7.jar lib/stax-api-1.0.1.jar lib/netflix-eventbus-0.3.0.jar lib/
+ netflix-infix-0.3.0.jar lib/commons-jxpath-1.3.jar lib/joda-time-2.10
+ .1.jar lib/antlr-runtime-3.4.jar lib/stringtemplate-3.2.1.jar lib/ant
+ lr-2.7.7.jar lib/commons-math-2.2.jar lib/jsr311-api-1.1.1.jar lib/se
+ rvo-core-0.12.21.jar lib/jersey-core-1.19.1.jar lib/jersey-client-1.1
+ 9.1.jar lib/jersey-apache-client4-1.19.1.jar lib/guice-4.1.0.jar lib/
+ aopalliance-1.0.jar lib/compactmap-1.2.1.jar lib/dexx-collections-0.2
+ .jar lib/jersey-servlet-1.19.1.jar lib/jersey-server-1.19.1.jar lib/e
+ ureka-core-1.9.8.jar lib/woodstox-core-asl-4.4.1.jar lib/stax-api-1.0
+ -2.jar lib/archaius-core-0.7.6.jar lib/jsr305-3.0.1.jar lib/commons-c
+ onfiguration-1.8.jar lib/commons-lang-2.6.jar lib/guava-16.0.jar lib/
+ javax.inject-1.jar lib/jackson-dataformat-xml-2.9.8.jar lib/jackson-m
+ odule-jaxb-annotations-2.9.8.jar lib/stax2-api-3.1.4.jar lib/woodstox
+ -core-5.0.3.jar lib/xstream-1.4.10.jar lib/xmlpull-1.1.3.1.jar lib/xp
+ p3_min-1.1.4c.jar lib/spring-cloud-starter-config-2.1.1.RELEASE.jar l
+ ib/spring-cloud-starter-2.1.1.RELEASE.jar lib/spring-cloud-context-2.
+ 1.1.RELEASE.jar lib/spring-security-rsa-1.0.7.RELEASE.jar lib/bcpkix-
+ jdk15on-1.60.jar lib/bcprov-jdk15on-1.60.jar lib/spring-cloud-config-
+ client-2.1.1.RELEASE.jar lib/spring-boot-starter-actuator-2.1.4.RELEA
+ SE.jar lib/spring-boot-starter-2.1.4.RELEASE.jar lib/spring-boot-2.1.
+ 4.RELEASE.jar lib/spring-boot-starter-logging-2.1.4.RELEASE.jar lib/l
+ ogback-classic-1.2.3.jar lib/logback-core-1.2.3.jar lib/log4j-to-slf4
+ j-2.11.2.jar lib/log4j-api-2.11.2.jar lib/jul-to-slf4j-1.7.26.jar lib
+ /javax.annotation-api-1.3.2.jar lib/snakeyaml-1.23.jar lib/spring-boo
+ t-actuator-autoconfigure-2.1.4.RELEASE.jar lib/spring-boot-actuator-2
+ .1.4.RELEASE.jar lib/spring-context-5.1.6.RELEASE.jar lib/jackson-dat
+ atype-jsr310-2.9.8.jar lib/micrometer-core-1.1.4.jar lib/HdrHistogram
+ -2.1.9.jar lib/LatencyUtils-2.0.3.jar lib/mysql-connector-java-8.0.15
+ .jar lib/protobuf-java-3.6.1.jar lib/druid-spring-boot-starter-1.1.10
+ .jar lib/spring-boot-autoconfigure-2.1.4.RELEASE.jar lib/druid-1.1.0.
+ jar lib/mybatis-spring-boot-starter-1.3.0.jar lib/spring-boot-starter
+ -jdbc-2.1.4.RELEASE.jar lib/HikariCP-3.2.0.jar lib/spring-jdbc-5.1.6.
+ RELEASE.jar lib/mybatis-spring-boot-autoconfigure-1.3.0.jar lib/mybat
+ is-3.4.4.jar lib/mybatis-spring-1.3.1.jar lib/spring-boot-starter-jet
+ ty-2.1.4.RELEASE.jar lib/jetty-servlets-9.4.15.v20190215.jar lib/jett
+ y-continuation-9.4.15.v20190215.jar lib/jetty-http-9.4.15.v20190215.j
+ ar lib/jetty-util-9.4.15.v20190215.jar lib/jetty-io-9.4.15.v20190215.
+ jar lib/jetty-webapp-9.4.15.v20190215.jar lib/jetty-xml-9.4.15.v20190
+ 215.jar lib/jetty-servlet-9.4.15.v20190215.jar lib/jetty-security-9.4
+ .15.v20190215.jar lib/jetty-server-9.4.15.v20190215.jar lib/websocket
+ -server-9.4.15.v20190215.jar lib/websocket-common-9.4.15.v20190215.ja
+ r lib/websocket-api-9.4.15.v20190215.jar lib/websocket-client-9.4.15.
+ v20190215.jar lib/jetty-client-9.4.15.v20190215.jar lib/websocket-ser
+ vlet-9.4.15.v20190215.jar lib/javax.servlet-api-4.0.1.jar lib/javax-w
+ ebsocket-server-impl-9.4.15.v20190215.jar lib/jetty-annotations-9.4.1
+ 5.v20190215.jar lib/jetty-plus-9.4.15.v20190215.jar lib/asm-7.0.jar l
+ ib/asm-commons-7.0.jar lib/asm-tree-7.0.jar lib/asm-analysis-7.0.jar 
+ lib/javax-websocket-client-impl-9.4.15.v20190215.jar lib/javax.websoc
+ ket-api-1.1.jar lib/apache-el-8.5.35.1.jar lib/spring-boot-starter-we
+ b-2.1.4.RELEASE.jar lib/spring-boot-starter-json-2.1.4.RELEASE.jar li
+ b/jackson-datatype-jdk8-2.9.8.jar lib/jackson-module-parameter-names-
+ 2.9.8.jar lib/spring-boot-starter-tomcat-2.1.4.RELEASE.jar lib/tomcat
+ -embed-core-9.0.17.jar lib/tomcat-embed-el-9.0.17.jar lib/tomcat-embe
+ d-websocket-9.0.17.jar lib/hibernate-validator-6.0.16.Final.jar lib/v
+ alidation-api-2.0.1.Final.jar lib/jboss-logging-3.3.2.Final.jar lib/c
+ lassmate-1.4.0.jar lib/spring-web-5.1.6.RELEASE.jar lib/spring-beans-
+ 5.1.6.RELEASE.jar lib/spring-webmvc-5.1.6.RELEASE.jar lib/spring-expr
+ ession-5.1.6.RELEASE.jar lib/spring-boot-starter-test-2.1.4.RELEASE.j
+ ar lib/spring-boot-test-2.1.4.RELEASE.jar lib/spring-boot-test-autoco
+ nfigure-2.1.4.RELEASE.jar lib/json-path-2.4.0.jar lib/json-smart-2.3.
+ jar lib/accessors-smart-1.2.jar lib/assertj-core-3.11.1.jar lib/mocki
+ to-core-2.23.4.jar lib/byte-buddy-1.9.12.jar lib/byte-buddy-agent-1.9
+ .12.jar lib/objenesis-2.6.jar lib/hamcrest-library-1.3.jar lib/jsonas
+ sert-1.5.0.jar lib/android-json-0.0.20131108.vaadin1.jar lib/spring-c
+ ore-5.1.6.RELEASE.jar lib/spring-jcl-5.1.6.RELEASE.jar lib/spring-tes
+ t-5.1.6.RELEASE.jar lib/xmlunit-core-2.6.2.jar lib/spring-boot-starte
+ r-thymeleaf-2.1.4.RELEASE.jar lib/thymeleaf-spring5-3.0.11.RELEASE.ja
+ r lib/thymeleaf-3.0.11.RELEASE.jar lib/attoparser-2.0.5.RELEASE.jar l
+ ib/unbescape-1.1.6.RELEASE.jar lib/thymeleaf-extras-java8time-3.0.4.R
+ ELEASE.jar lib/slf4j-api-1.7.26.jar lib/slf4j-log4j12-1.7.26.jar lib/
+ log4j-1.2.17.jar lib/gson-2.8.5.jar lib/jackson-databind-2.9.8.jar li
+ b/jackson-core-2.9.8.jar lib/jackson-annotations-2.9.0.jar lib/fastjs
+ on-1.2.53.jar lib/shiro-core-1.4.0.jar lib/shiro-lang-1.4.0.jar lib/s
+ hiro-cache-1.4.0.jar lib/shiro-crypto-hash-1.4.0.jar lib/shiro-crypto
+ -core-1.4.0.jar lib/shiro-crypto-cipher-1.4.0.jar lib/shiro-config-co
+ re-1.4.0.jar lib/shiro-config-ogdl-1.4.0.jar lib/commons-beanutils-1.
+ 9.3.jar lib/commons-collections-3.2.2.jar lib/shiro-event-1.4.0.jar l
+ ib/shiro-spring-1.4.0.jar lib/shiro-web-1.4.0.jar lib/jedis-2.9.3.jar
+  lib/commons-pool2-2.6.1.jar lib/spring-data-redis-2.1.6.RELEASE.jar 
+ lib/spring-data-keyvalue-2.1.6.RELEASE.jar lib/spring-data-commons-2.
+ 1.6.RELEASE.jar lib/spring-tx-5.1.6.RELEASE.jar lib/spring-oxm-5.1.6.
+ RELEASE.jar lib/spring-aop-5.1.6.RELEASE.jar lib/spring-context-suppo
+ rt-5.1.6.RELEASE.jar lib/spring-boot-starter-data-redis-2.1.4.RELEASE
+ .jar lib/lettuce-core-5.1.6.RELEASE.jar lib/netty-common-4.1.34.Final
+ .jar lib/netty-handler-4.1.34.Final.jar lib/netty-buffer-4.1.34.Final
+ .jar lib/netty-codec-4.1.34.Final.jar lib/netty-transport-4.1.34.Fina
+ l.jar lib/netty-resolver-4.1.34.Final.jar lib/reactor-core-3.2.8.RELE
+ ASE.jar lib/reactive-streams-1.0.2.jar lib/httpcore-4.4.11.jar lib/ht
+ tpclient-4.5.8.jar lib/commons-codec-1.11.jar lib/asm-1.0.2.jar lib/a
+ sm-3.3.1.jar
+Build-Jdk: 1.8.0_221
+Created-By: Maven Integration for Eclipse
+Main-Class: com.elling.book.sys.sysApplication
+
