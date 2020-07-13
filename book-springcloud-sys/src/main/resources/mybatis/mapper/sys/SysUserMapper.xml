@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elling.sys.dao.mapper.SysUserMapper">
+	<select id="getRoleByUserId" resultType="com.elling.common.entity.TreeNode">
+  		SELECT
+			CONCAT(T.ROLE_ID,'') id,
+			'0' pid,
+			T.role_name name
+		FROM
+			SYS_ROLE T,
+			SYS_USER_ROLE R
+		WHERE
+			T.ROLE_ID = R.ROLE_ID
+		<if test="userId!=null and userId!=''">
+			AND R.USER_ID = #{userId}
+		</if>
+  </select>
+  <!-- 保存sys_user_dept关联表  -->
+  <insert id="saveUserDept">
+  	INSERT INTO SYS_USER_DEPT(USER_ID,DEPT_ID) VALUES
+  	<foreach collection="list" item="item" index="index" separator=",">
+  		(#{item.userId},#{item.deptId})
+  	</foreach>
+  </insert>
+  <!-- 保存sys_user_role关联表  -->
+  <insert id="saveUserRole">
+  	INSERT INTO SYS_USER_ROLE(USER_ID,ROLE_ID) VALUES
+  	<foreach collection="list" item="item" index="index" separator=",">
+  		(#{item.userId},#{item.roleId})
+  	</foreach>
+  </insert>
+  <delete id="deleteUserDeptByUserId">
+  	DELETE FROM SYS_USER_DEPT WHERE USER_ID = #{userId}
+  </delete>
+  <delete id="deleteUserRoleByUserId">
+  	DELETE FROM SYS_USER_ROLE WHERE USER_ID = #{userId}
+  </delete>
+  <delete id="deleteUserDeptByUserIds">
+  	DELETE FROM SYS_USER_DEPT WHERE USER_ID in 
+  	<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+         #{item}
+    </foreach>
+  </delete>
+  <delete id="deleteUserRoleByUserIds">
+  	DELETE FROM SYS_USER_ROLE WHERE USER_ID in 
+  	<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+         #{item}
+    </foreach>
+  </delete>
+  <resultMap id="BaseResultMap" type="com.elling.sys.model.SysUser">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="salt" jdbcType="VARCHAR" property="salt" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="dept_id" jdbcType="BIGINT" property="deptId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="create_time" jdbcType="VARCHAR" property="createTime" />
+    <result column="user_code" jdbcType="VARCHAR" property="userCode" />
+    <result column="user_type" jdbcType="TINYINT" property="userType" />
+  </resultMap>
+  
+</mapper>

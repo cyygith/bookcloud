@@ -1,6 +1,7 @@
 package com.elling.book.flowable.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -38,6 +39,10 @@ public interface TaskQueryDao {
 	 */
 	public List getTodoListByUserIdCondition(@Param("page") Page page,@Param("query") TaskQuery taskQuery);
 	public Integer getTodoListByUserIdConditionCount(@Param("query") TaskQuery taskQuery);
-	
-	
+	/**
+	 * 获取ACT_HI_TASKIINST中的内容
+	 * @param taskQuery
+	 * @return
+	 */
+	public List<Map<String,Object>> getActHiTaskinstByCondition(TaskQuery taskQuery);
 }

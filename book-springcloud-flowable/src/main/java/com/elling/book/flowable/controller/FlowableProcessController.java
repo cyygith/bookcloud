@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.elling.book.flowable.common.entity.Result;
+import com.elling.book.flowable.entity.TaskQuery;
 import com.elling.book.flowable.service.FlowableTaskService;
 import com.elling.book.flowable.service.NextTaskService;
 import com.elling.book.flowable.util.MyStringUtil;
@@ -191,5 +192,82 @@ public class FlowableProcessController {
     		return Result.error(e.getMessage());
     	}
     }
-
+    
+    /**
+	 * 退回上个节点
+	 * @param parmMap
+	 *  processId:xxx,			//流程实例ID（必须）
+	 *  taskId:xxx,				//任务ID（必须）
+	 *  currTaskKeys:xxx,		//驳回发起的当前节点key 为  act_ru_task 中TASK_DEF_KEY_ 字段的值
+	 *  targetKey:xxx,  		//目标节点的key  为act_hi_taskinst 中 TASK_DEF_KEY_
+	 */
+    @RequestMapping(value = "rollBackToLastTask")
+    public Result rollBackToLastTask(@RequestBody TaskQuery taskQuery) {
+    	try {
+    		if(MyStringUtil.isNullOrEmpty(taskQuery.getProcessId())) {
+    			return Result.error("【processId不能为空】");
+    		}
+    		if(MyStringUtil.isNullOrEmpty(taskQuery.getTaskId())) {
+    			return Result.error("【taskId 不能为空】");
+    		}
+//    		if(MyStringUtil.isNullOrEmpty(currTaskKeys)) {
+//    			return Result.error("【currTaskKeys不能为空】");
+//    		}
+//    		if(MyStringUtil.isNullOrEmpty(targetKey)) {
+//    			return Result.error("【targetKey不能为空】");
+//    		}
+    		flowableTaskService.backToLastTask(taskQuery);
+    		return Result.success();
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    		logger.error(e.getMessage());
+    		return Result.error(e.getMessage());
+    	}
+    }
+    /**
+	 * 转办
+	 * @param parmMap
+	 *  userId:xxx,			//提交用户ID（必须）
+	 *  taskId:xxx,			//当前任务ID（必须）
+	 */
+    @RequestMapping(value = "turnTaskToPerson")
+    public Result turnTaskToPerson(@RequestBody Map<String,Object> parmMap) {
+    	try {
+    		String userId = MyStringUtil.getString(parmMap.get("userId"));
+    		if(MyStringUtil.isNullOrEmpty(userId)) {
+    			return Result.error("【userId不能为空】");
+    		}
+    		String taskId = MyStringUtil.getString(parmMap.get("taskId"));
+    		if(MyStringUtil.isNullOrEmpty(taskId)) {
+    			return Result.error("【taskId不能为空】");
+    		}
+    		flowableTaskService.turnTaskToPerson(parmMap);
+    		return Result.success();
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    		logger.error(e.getMessage());
+    		return Result.error(e.getMessage());
+    	}
+    }
+    
+    /**
+	 * 转办
+	 * @param parmMap
+	 *  processId:xxx,			//流程实例ID（必须）
+	 */
+    @RequestMapping(value = "cancelProcess")
+    public Result cancelProcess(@RequestBody TaskQuery taskQuery) {
+    	try {
+    		if(MyStringUtil.isNullOrEmpty(taskQuery.getProcessId())) {
+    			return Result.error("【processId不能为空】");
+    		}
+    		
+    		flowableTaskService.cancelProcess(taskQuery);
+    		return Result.success();
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    		logger.error(e.getMessage());
+    		return Result.error(e.getMessage());
+    	}
+    }
 }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elling.contents.dao.mapper.CChartsMapper">
+
+
+	<select id="getCLineCharts" resultType="java.util.HashMap">
+	    SELECT
+			LEFT (T.CREATE_TIME, 10) CREATE_TIME,
+			COUNT(1) COUNT
+		FROM
+			G_GOODS T
+		<where>
+			<if test="@com.elling.common.utils.StringUtil@isNotEmpty(startTime)">
+				AND T.CREATE_TIME >= #{startTime}
+			</if>
+			<if test="@com.elling.common.utils.StringUtil@isNotEmpty(endTime)">
+				AND <![CDATA[T.CREATE_TIME < #{endTime}]]>
+			</if>
+		</where>
+		GROUP BY LEFT (T.CREATE_TIME, 10)
+  </select>
+
+
+</mapper>

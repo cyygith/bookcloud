@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elling.accbook.dao.mapper.AccBookMapper">
+  <resultMap id="BaseResultMap" type="com.elling.accbook.model.AccBook">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="TYPE" jdbcType="CHAR" property="type" />
+    <result column="MONEY" jdbcType="VARCHAR" property="money" />
+    <result column="TIME" jdbcType="VARCHAR" property="time" />
+    <result column="MARK" jdbcType="VARCHAR" property="mark" />
+    <result column="CATEGORY" jdbcType="CHAR" property="category" />
+    <result column="CREATE_TIME" jdbcType="VARCHAR" property="createTime" />
+    <result column="UPDATE_TIME" jdbcType="VARCHAR" property="updateTime" />
+    <result column="USER_ID" jdbcType="VARCHAR" property="userId" />
+  </resultMap>
+  <resultMap id="customerMap" type="java.util.HashMap">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="TYPE" jdbcType="CHAR" property="type" />
+    <result column="MONEY" jdbcType="VARCHAR" property="money" />
+    <result column="TIME" jdbcType="VARCHAR" property="time" />
+    <result column="MARK" jdbcType="VARCHAR" property="mark" />
+    <result column="CATEGORY" jdbcType="CHAR" property="category" />
+    <result column="CREATE_TIME" jdbcType="VARCHAR" property="createTime" />
+    <result column="UPDATE_TIME" jdbcType="VARCHAR" property="updateTime" />
+    <result column="USER_ID" jdbcType="VARCHAR" property="userId" />
+  </resultMap>
+  <!--根据自定义条件查询-->
+  <select id="getByCondition" resultMap="customerMap">
+	    SELECT
+			T.TYPE,T.MONEY,T.TIME,T.MARK,T.USER_ID,T.CATALOG 
+		FROM
+			ACC_BOOK T
+		<where>
+			<if test="id!=null and id != ''">T.ID = #{id}</if>
+			<if test="type!=null and type != ''">T.TYPE = #{type}</if>
+			<if test="money!=null and money != ''">T.MONEY = #{money}</if>
+			<if test="time!=null and time != ''">T.TIME = #{time}</if>
+			<if test="mark!=null and mark != ''">T.MARK = #{mark}</if>
+			<if test="userId!=null and userId != ''">T.USER_ID = #{userId}</if>
+			<if test="category!=null and category != ''">T.CATEGORY = #{category}</if>
+			<if test="createTime!=null and createTime != ''">T.CREATE_TIME = #{createTime}</if>
+			<if test="updateTime!=null and updateTime != ''">T.UPDATE_TIME = #{updateTime}</if>
+		</where>
+  </select>
+  <select id="getSumByTypeAndTime" resultType="java.util.HashMap">
+  		SELECT
+			CASE T.TYPE
+		WHEN '0' THEN
+			'收入'
+		ELSE
+			'支出'
+		END TYPE_NAME,
+		 T.TYPE,
+		 <if test="day!=null and day!= ''">DATE_FORMAT(T.TIME, '%Y-%m-%d') TIME,</if>
+		 <if test="month!=null and month!= ''">DATE_FORMAT(T.TIME, '%Y-%m') TIME,</if>
+		 <if test="year!=null and year!= ''">DATE_FORMAT(T.TIME, '%Y') TIME,</if>
+		 SUM(CONVERT (T.MONEY, DECIMAL(10, 2))) SUM
+		FROM
+			ACC_BOOK T
+		<where>
+			<if test="day!=null and day!= ''">AND DATE_FORMAT(T.time, '%Y-%m') = #{day}</if>
+			<if test="month!=null and month!= ''">AND DATE_FORMAT(T.time, '%Y-%m') = #{month}</if>
+			<if test="year!=null and year!=''">AND DATE_FORMAT(T.time, '%Y') = #{year}</if>
+			<if test="userId!=null and userId!=''">AND USER_ID = #{userId}</if>
+		</where>
+		GROUP BY
+			T.TYPE,
+			<if test="day!=null and day!=''">DATE_FORMAT(T.TIME, '%Y-%m-%d')</if>
+		 	<if test="month!=null and month!=''">DATE_FORMAT(T.TIME, '%Y-%m')</if>
+		 	<if test="year!=null and year!=''">DATE_FORMAT(T.TIME, '%Y')</if>
+		ORDER BY
+			TIME DESC
+  </select>
+  <select id="getDayOfMonth" resultType="java.util.HashMap">
+	  	SELECT
+			DATE_FORMAT(T.TIME, '%Y-%m-%d') TIME
+		FROM
+			ACC_BOOK T
+		WHERE
+			DATE_FORMAT(T.time, '%Y-%m') = #{month}
+			<if test="userId!=null and userId!=''">AND USER_ID = #{userId}</if>
+		GROUP BY
+			DATE_FORMAT(T.TIME, '%Y-%m-%d')
+		ORDER BY
+			TIME DESC
+  </select>
+  <select id="getSumDayAndSumCount" resultType="java.util.HashMap">
+  		SELECT
+			COUNT(1) SUMDAY,
+			SUM(A.JZS) SUMCOUNT
+		FROM
+			(
+				SELECT
+					T.TIME,
+					COUNT(1) JZS
+				FROM
+					ACC_BOOK T
+				<where>
+					<if test="userId!=null and userId!=''">USER_ID = #{userId}</if>
+				</where>
+				GROUP BY
+					T.TIME
+			) A
+  </select>
+</mapper>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elling.sys.dao.mapper.SysDeptMapper">
+
+	<select id="getDeptLevel" resultMap="BaseResultMap">
+  		SELECT T.*, CASE WHEN  EXISTS (SELECT S.DEPT_ID FROM SYS_DEPT S WHERE S.PARENT_ID = T.DEPT_ID) 
+  			THEN
+				'TRUE'
+			ELSE
+				'FALSE'
+			END AS HAS_CHILDREN
+			FROM
+				SYS_DEPT T
+			WHERE
+				T.PARENT_ID = #{parentId}
+  </select>
+  <select id="getDeptDataByUserId" resultType="com.elling.common.entity.TreeNode">
+  		SELECT
+			CONCAT(T.DEPT_ID,'') id,
+			CONCAT(T.PARENT_ID,'') pid,
+			T.NAME name
+		FROM
+			SYS_DEPT T,
+			SYS_USER_DEPT D
+		WHERE
+			T.DEPT_ID = D.DEPT_ID
+		AND D.USER_ID = #{userId}
+  </select>
+  <select id="getAllDeptData" resultType="com.elling.common.entity.TreeNode">
+  		SELECT
+			CONCAT(T.DEPT_ID,'') id,
+			CONCAT(T.PARENT_ID,'') pid,
+			T.NAME	name
+		FROM
+			SYS_DEPT T
+  </select>
+  <resultMap id="BaseResultMap" type="com.elling.sys.model.SysDept">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="dept_id" jdbcType="BIGINT" property="deptId" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="order_num" jdbcType="INTEGER" property="orderNum" />
+    <result column="del_flag" jdbcType="TINYINT" property="delFlag" />
+    <result column="dept_code" jdbcType="VARCHAR" property="deptCode" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+</mapper>

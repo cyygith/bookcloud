@@ -16,7 +16,16 @@ public class TaskQuery {
 	private String starterId;//发起人ID
 	private String starter;//发起人名称
 	private String systemSn;//所属系统
+	private String taskId;//任务id
 	
+	
+	
+	public String getTaskId() {
+		return taskId;
+	}
+	public void setTaskId(String taskId) {
+		this.taskId = taskId;
+	}
 	public String getUserId() {
 		return userId;
 	}

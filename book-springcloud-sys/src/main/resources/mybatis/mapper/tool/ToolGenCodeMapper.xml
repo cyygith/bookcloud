@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elling.tool.dao.mapper.ToolGenCodeMapper">
+  <resultMap id="BaseResultMap" type="com.elling.tool.model.ToolGenCode">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="RUN_TABLE" jdbcType="VARCHAR" property="runTable" />
+    <result column="JDBC_URL" jdbcType="VARCHAR" property="jdbcUrl" />
+    <result column="JDBC_USERNAME" jdbcType="VARCHAR" property="jdbcUsername" />
+    <result column="JDBC_PASSWORD" jdbcType="VARCHAR" property="jdbcPassword" />
+    <result column="JDBC_DRIVER_CLASS_NAME" jdbcType="VARCHAR" property="jdbcDriverClassName" />
+    <result column="JDBC_SCHEMA" jdbcType="VARCHAR" property="jdbcSchema" />
+    <result column="JAVA_PATH" jdbcType="VARCHAR" property="javaPath" />
+    <result column="RESOURCES_PATH" jdbcType="VARCHAR" property="resourcesPath" />
+    <result column="TEMPLATE_FILE_PATH" jdbcType="VARCHAR" property="templateFilePath" />
+    <result column="BASE_MODEL" jdbcType="VARCHAR" property="baseModel" />
+    <result column="BASE_PACKAGE" jdbcType="VARCHAR" property="basePackage" />
+    <result column="MODEL_PACKAGE" jdbcType="VARCHAR" property="modelPackage" />
+    <result column="MAPPER_PACKAGE" jdbcType="VARCHAR" property="mapperPackage" />
+    <result column="SERVICE_PACKAGE" jdbcType="VARCHAR" property="servicePackage" />
+    <result column="SERVICE_IMPL_PACKAGE" jdbcType="VARCHAR" property="serviceImplPackage" />
+    <result column="CONTROLLER_PACKAGE" jdbcType="VARCHAR" property="controllerPackage" />
+    <result column="AUTHOR" jdbcType="VARCHAR" property="author" />
+    <result column="DATE_FORMAT" jdbcType="VARCHAR" property="dateFormat" />
+    <result column="RUN_COUNT" jdbcType="INTEGER" property="runCount" />
+    <result column="RUN_CLASS" jdbcType="VARCHAR" property="runClass" />
+    <result column="RUN_TIME" jdbcType="VARCHAR" property="runTime" />
+  </resultMap>
+  <resultMap id="customerMap" type="java.util.HashMap">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="RUN_TABLE" jdbcType="VARCHAR" property="runTable" />
+    <result column="JDBC_URL" jdbcType="VARCHAR" property="jdbcUrl" />
+    <result column="JDBC_USERNAME" jdbcType="VARCHAR" property="jdbcUsername" />
+    <result column="JDBC_PASSWORD" jdbcType="VARCHAR" property="jdbcPassword" />
+    <result column="JDBC_DRIVER_CLASS_NAME" jdbcType="VARCHAR" property="jdbcDriverClassName" />
+    <result column="JDBC_SCHEMA" jdbcType="VARCHAR" property="jdbcSchema" />
+    <result column="JAVA_PATH" jdbcType="VARCHAR" property="javaPath" />
+    <result column="RESOURCES_PATH" jdbcType="VARCHAR" property="resourcesPath" />
+    <result column="TEMPLATE_FILE_PATH" jdbcType="VARCHAR" property="templateFilePath" />
+    <result column="BASE_MODEL" jdbcType="VARCHAR" property="baseModel" />
+    <result column="BASE_PACKAGE" jdbcType="VARCHAR" property="basePackage" />
+    <result column="MODEL_PACKAGE" jdbcType="VARCHAR" property="modelPackage" />
+    <result column="MAPPER_PACKAGE" jdbcType="VARCHAR" property="mapperPackage" />
+    <result column="SERVICE_PACKAGE" jdbcType="VARCHAR" property="servicePackage" />
+    <result column="SERVICE_IMPL_PACKAGE" jdbcType="VARCHAR" property="serviceImplPackage" />
+    <result column="CONTROLLER_PACKAGE" jdbcType="VARCHAR" property="controllerPackage" />
+    <result column="AUTHOR" jdbcType="VARCHAR" property="author" />
+    <result column="DATE_FORMAT" jdbcType="VARCHAR" property="dateFormat" />
+    <result column="RUN_COUNT" jdbcType="INTEGER" property="runCount" />
+    <result column="RUN_CLASS" jdbcType="VARCHAR" property="runClass" />
+    <result column="RUN_TIME" jdbcType="VARCHAR" property="runTime" />
+  </resultMap>
+  <!--根据自定义条件查询-->
+  <select id="getByCondition" resultMap="customerMap">
+	    SELECT
+			T.* 
+		FROM
+			TOOL_GEN_CODE T
+		<where>
+			<if test="id!=null and id != ''">T.ID = #{id}</if>
+			<if test="runTable!=null and runTable != ''">T.RUN_TABLE = #{runTable}</if>
+			<if test="jdbcUrl!=null and jdbcUrl != ''">T.JDBC_URL = #{jdbcUrl}</if>
+			<if test="jdbcUsername!=null and jdbcUsername != ''">T.JDBC_USERNAME = #{jdbcUsername}</if>
+			<if test="jdbcPassword!=null and jdbcPassword != ''">T.JDBC_PASSWORD = #{jdbcPassword}</if>
+			<if test="jdbcDriverClassName!=null and jdbcDriverClassName != ''">T.JDBC_DRIVER_CLASS_NAME = #{jdbcDriverClassName}</if>
+			<if test="jdbcSchema!=null and jdbcSchema != ''">T.JDBC_SCHEMA = #{jdbcSchema}</if>
+			<if test="javaPath!=null and javaPath != ''">T.JAVA_PATH = #{javaPath}</if>
+			<if test="resourcesPath!=null and resourcesPath != ''">T.RESOURCES_PATH = #{resourcesPath}</if>
+			<if test="templateFilePath!=null and templateFilePath != ''">T.TEMPLATE_FILE_PATH = #{templateFilePath}</if>
+			<if test="baseModel!=null and baseModel != ''">T.BASE_MODEL = #{baseModel}</if>
+			<if test="basePackage!=null and basePackage != ''">T.BASE_PACKAGE = #{basePackage}</if>
+			<if test="modelPackage!=null and modelPackage != ''">T.MODEL_PACKAGE = #{modelPackage}</if>
+			<if test="mapperPackage!=null and mapperPackage != ''">T.MAPPER_PACKAGE = #{mapperPackage}</if>
+			<if test="servicePackage!=null and servicePackage != ''">T.SERVICE_PACKAGE = #{servicePackage}</if>
+			<if test="serviceImplPackage!=null and serviceImplPackage != ''">T.SERVICE_IMPL_PACKAGE = #{serviceImplPackage}</if>
+			<if test="controllerPackage!=null and controllerPackage != ''">T.CONTROLLER_PACKAGE = #{controllerPackage}</if>
+			<if test="author!=null and author != ''">T.AUTHOR = #{author}</if>
+			<if test="dateFormat!=null and dateFormat != ''">T.DATE_FORMAT = #{dateFormat}</if>
+			<if test="runCount!=null and runCount != ''">T.RUN_COUNT = #{runCount}</if>
+			<if test="runClass!=null and runClass != ''">T.RUN_CLASS = #{runClass}</if>
+			<if test="runTime!=null and runTime != ''">T.RUN_TIME = #{runTime}</if>
+		</where>
+  </select>
+</mapper>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elling.sys.dao.mapper.SysRoleMapper">
+  <resultMap id="BaseResultMap" type="com.elling.sys.model.SysRole">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="role_id" jdbcType="BIGINT" property="roleId" />
+    <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_time" jdbcType="VARCHAR" property="createTime" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="role_type" jdbcType="VARCHAR" property="roleType" />
+    <result column="role_code" jdbcType="VARCHAR" property="roleCode" />
+  </resultMap>
+  
+  <select id="getSysRolebyUserId" parameterType="com.elling.sys.model.SysRole" resultMap="BaseResultMap">
+  	SELECT R.* FROM SYS_USER_ROLE T LEFT JOIN SYS_ROLE R ON T.ROLE_ID = R.ROLE_ID 
+  	WHERE 1 = 1
+  	<if test="userId != null">
+        AND T.USER_ID = #{userId}
+    </if>
+  	<if test="username != null">
+        AND T.USERNAME = #{username}
+    </if>	
+  </select>
+  <insert id="saveRoleMenus">
+  	INSERT INTO SYS_ROLE_MENU(ROLE_ID,MENU_ID) VALUES
+  	<foreach collection="list" item="item" index="index" separator=",">
+  		(#{item.roleId},#{item.menuId})
+  	</foreach>
+  </insert>
+  <delete id="deletMenuRoleByRoleId">
+  	DELETE FROM SYS_ROLE_MENU WHERE ROLE_ID = #{roleId}
+  </delete>
+  <delete id="deletMenuRoleByRoleIds">
+  	DELETE FROM SYS_ROLE_MENU WHERE ROLE_ID in 
+  	<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+         #{item}
+    </foreach>
+  </delete>
+</mapper>

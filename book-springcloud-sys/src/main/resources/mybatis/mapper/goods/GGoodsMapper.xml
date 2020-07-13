@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elling.goods.dao.mapper.GGoodsMapper">
+	<delete id="deleteByUuids" parameterType="java.lang.String">
+        delete from  g_goods where id in
+        <foreach collection="list"  open="(" close=")" separator=","  item="item" >
+            #{item}
+        </foreach>
+    </delete>
+	
+	<select id="getGoodsById" resultMap="BaseResultMap">
+	    SELECT
+			IFNULL((SELECT CNAME FROM G_CATALOG WHERE ID = T.PID ),'顶级节点') PNAME,
+			T.* 
+		FROM
+			G_GOODS T
+		<where>
+			<if test="id!=null and id != ''">
+				id = #{id}
+			</if>
+			<if test="pid!=null and pid != ''">
+				T.PID = #{pid}
+			</if>
+		</where>
+  </select>
+  <resultMap id="BaseResultMap" type="com.elling.goods.model.GGoods">
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="CNAME" jdbcType="VARCHAR" property="cname" />
+    <result column="ENAME" jdbcType="VARCHAR" property="ename" />
+    <result column="C_URL" jdbcType="VARCHAR" property="cUrl" />
+    <result column="CREATE_TIME" jdbcType="VARCHAR" property="createTime" />
+    <result column="UPDATE_TIME" jdbcType="VARCHAR" property="updateTime" />
+    <result column="PID" jdbcType="VARCHAR" property="pid" />
+    <result column="T_PRICE" jdbcType="VARCHAR" property="tPrice" />
+    <result column="D_PRICE" jdbcType="VARCHAR" property="dPrice" />
+    <result column="SELL_COUNT" jdbcType="VARCHAR" property="sellCount" />
+    <result column="TICKET" jdbcType="VARCHAR" property="ticket" />
+    <result column="descr" jdbcType="VARCHAR" property="descr" />
+    <result column="img_url" jdbcType="VARCHAR" property="imgUrl" />
+    <result column="PNAME" jdbcType="VARCHAR" property="pname" />
+  </resultMap>
+</mapper>

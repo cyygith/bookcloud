@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elling.sys.dao.mapper.SysMenuMapper">
+  <resultMap id="BaseResultMap" type="com.elling.sys.model.SysMenu">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="menu_id" jdbcType="BIGINT" property="menuId" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="perms" jdbcType="VARCHAR" property="perms" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
+    <result column="order_num" jdbcType="INTEGER" property="orderNum" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="has_children" jdbcType="BOOLEAN" property="hasChildren" />
+  </resultMap>
+  <resultMap id="customerMap" type="java.util.HashMap">
+    <id column="menu_id" jdbcType="BIGINT" property="menuId" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="perms" jdbcType="VARCHAR" property="perms" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
+    <result column="order_num" jdbcType="INTEGER" property="orderNum" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="has_children" jdbcType="BOOLEAN" property="hasChildren" />
+  </resultMap>
+  
+  <select id="getMenuLevel" resultMap="BaseResultMap">
+  		SELECT T.*, CASE WHEN  EXISTS (SELECT S.MENU_ID FROM SYS_MENU S WHERE S.PARENT_ID = T.MENU_ID) 
+  			THEN
+				'TRUE'
+			ELSE
+				'FALSE'
+			END AS HAS_CHILDREN
+			FROM
+				SYS_MENU T
+			WHERE
+				T.PARENT_ID = #{parentId}
+  </select>
+  
+  <select id="getMenuData" resultType="com.elling.common.entity.TreeNode">
+  		SELECT
+			CONCAT(T.MENU_ID,'') id,
+			CONCAT(T.PARENT_ID,'') pid,
+			T.NAME name,
+			T.URL url,
+		  	T.ICON icon
+		FROM
+			SYS_MENU T,
+			SYS_ROLE_MENU M
+		WHERE
+			T.MENU_ID = M.MENU_ID
+		AND M.ROLE_ID = #{roleId}
+  </select>
+  <select id="getMenuTree" resultType="com.elling.common.entity.TreeNode">
+	    SELECT
+			CONCAT(T.MENU_ID,'') ID,
+			CONCAT(T.PARENT_ID,'') PID,
+			T.NAME NAME,
+			T.URL URL,
+			T.ICON,
+			CASE WHEN EXISTS (
+				SELECT S.MENU_ID	FROM SYS_MENU S WHERE	S.PARENT_ID = T.MENU_ID) THEN 'FALSE' ELSE 'TRUE' END AS IS_LEAF
+		FROM
+			SYS_MENU T
+		WHERE 1=1 AND T.PARENT_ID = #{parentId}
+  </select>
+  <select id="getAllMenuData" resultType="com.elling.common.entity.TreeNode">
+  		SELECT
+			CONCAT(T.MENU_ID,'') id,
+			CONCAT(T.PARENT_ID,'') pid,
+			T.NAME name,
+			T.URL url,
+		  	T.ICON icon
+		FROM
+			SYS_MENU T
+  </select>
+  <select id="getByCondition" resultMap="customerMap">
+	    SELECT
+			IFNULL((SELECT NAME FROM SYS_MENU WHERE MENU_ID = T.PARENT_ID ),'顶级节点') parentName,
+			T.* 
+		FROM
+			SYS_MENU T
+		<where>
+			<if test="menuId!=null and menuId != ''">
+				T.MENU_ID = #{menuId}
+			</if>
+			<if test="parentId!=null and parentId != ''">
+				T.PARENT_ID = #{parentId}
+			</if>
+		</where>
+  </select>
+</mapper>

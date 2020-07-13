@@ -231,4 +231,26 @@
 				)
 			) D
 	</select>
+	<!-- 获取Act_HI_TASKINST表相关信息 -->
+	<select id="getActHiTaskinstByCondition" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			T.ID_ AS taskId,
+			T.PROC_INST_ID_ AS processId,
+			T.EXECUTION_ID_ AS executionId,
+			T.TASK_DEF_KEY_ AS taskdefKey,
+			T.PROC_DEF_ID_ AS procDefId,
+			T.NAME_ AS taskName,
+			T.FORM_KEY_ AS formKey,
+			T.START_TIME_ AS startTime
+		FROM
+		 	ACT_HI_TASKINST T
+		WHERE 1=1
+			<if test="processId!=null and processId!=''">
+				AND T.PROC_INST_ID_ = #{processId}
+			</if>
+			<if test="taskId!=null and taskId!=''">
+				AND T.ID_ = #{taskId}
+			</if>
+			ORDER BY T.START_TIME_ DESC
+	</select>
 </mapper>
