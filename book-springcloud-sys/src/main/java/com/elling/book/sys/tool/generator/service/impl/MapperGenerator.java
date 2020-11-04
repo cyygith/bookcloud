@@ -64,7 +64,7 @@ public class MapperGenerator extends CodeManager implements ICode{
 
 	@Override
 	public Map<String, Object> getInitData(Map<String, Object> pmap) {
-		Map<String, Object> data = new HashMap<>();
+		Map<String, Object> data = new HashMap<String, Object>();
 		ToolGenCode toolGenCode = (ToolGenCode)pmap.get("toolGenCode");
 		String tableName = pmap.get("tableName")+"";
 		data.put("date", DateUtil.getNowTime());

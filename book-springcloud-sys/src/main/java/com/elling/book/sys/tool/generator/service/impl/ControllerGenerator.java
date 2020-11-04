@@ -61,7 +61,7 @@ public class ControllerGenerator extends CodeManager implements ICode {
 
 	@Override
 	public Map<String, Object> getInitData(Map<String, Object> map) {
-		Map<String, Object> data = new HashMap<>();
+		Map<String, Object> data = new HashMap<String, Object>();
 		data.put("date", DateUtil.getNowTime());
         data.put("author", map.get("author"));
         data.put("sign", map.get("sign"));

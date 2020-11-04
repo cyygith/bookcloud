@@ -79,12 +79,29 @@ public interface FlowableTaskService {
 	 * {
 	 *  userId:xxx,			//提交用户ID（必须）
 	 *  taskId:xxx,			//当前任务ID（必须）
+	 *  commentMsg:xxx		//节点意见
 	 *  xxx:xxx				//其它流程中需要的参数（选择性）
 	 *  ....
 	 * }
 	 * @return
 	 */
 	public String claimAndSubmitToNextTask(Map<String,Object> parmMap);
+	/**
+	 * 认领并提交下一个节点(指定人员)
+	 * @param parmMap
+	 * 参数包含如下：
+	 * {
+	 *  userId:xxx,			//提交用户ID（必须）
+	 *  taskId:xxx,			//当前任务ID（必须）
+	 *  nextUserId:xxx,		//下个节点执行人用户ID（必须）
+	 *  businessId:xxx,		//业务编号
+	 *  commentMsg:xxx		//节点意见
+	 *  xxx:xxx				//其它流程中需要的参数（选择性）
+	 *  ....
+	 * }
+	 * @return
+	 */
+	public String claimAndSubmitToNextTaskToPerson(Map<String,Object> parmMap);
 	
 	/**
 	 * 直接提交下一个节点
@@ -99,6 +116,22 @@ public interface FlowableTaskService {
 	 * @return
 	 */
 	public String submitToNextTask(Map<String,Object> parmMap);
+	/**
+	 * 直接提交下一个节点（指定人员）
+	 * @param parmMap
+	 * 参数包含如下：
+	 * {
+	 *  userId:xxx,			//提交用户ID（必须）
+	 *  taskId:xxx,			//当前任务ID（必须）
+	 *  nextUserId:xxx,		//下个节点执行人用户ID（必须）
+	 *  businessId:xxx,		//业务编号
+	 *  commentMsg:xxx		//节点意见
+	 *  xxx:xxx				//其它流程中需要的参数（选择性）
+	 *  ....
+	 * }
+	 * @return
+	 */
+	public String submitToNextTaskToPerson(Map<String,Object> parmMap);
 	
 	/**
 	 *  退回上个节点（无并行任务的流程情况下）
@@ -136,6 +169,19 @@ public interface FlowableTaskService {
 	 * @return
 	 */
 	public String cancelProcess(TaskQuery taskQuery);
+	/**
+	 *     返回首个节点
+	 * @param parmMap
+	 * 参数包含如下：
+	 * {
+	 *  processId:xxx,			//流程实例ID（必须）
+	 *  taskId:xxx,			//当前任务ID（必须）
+	 *  currTaskKeys:xxx	//驳回发起的当前节点key 为 act_ru_task中的TASK_DEF_KEY_字段的值
+	 *  targetKey:xxx		//目标节点的key  为act_hi_taskinst中的TASK_DEF_KEY_字段的值
+	 * }
+	 * @return
+	 */
+	public String backToFirstTask(TaskQuery taskQuery);
 	
 	
 }

@@ -18,6 +18,10 @@ public class TaskQuery {
 	private String systemSn;//所属系统
 	private String taskId;//任务id
 	
+	private String token;//token
+	private String roleCode;//角色code
+	private String taskDefKey;//节点定义
+	
 	
 	
 	public String getTaskId() {
@@ -116,5 +120,24 @@ public class TaskQuery {
 	public void setSystemSn(String systemSn) {
 		this.systemSn = systemSn;
 	}
+	public String getToken() {
+		return token;
+	}
+	public void setToken(String token) {
+		this.token = token;
+	}
+	public String getRoleCode() {
+		return roleCode;
+	}
+	public void setRoleCode(String roleCode) {
+		this.roleCode = roleCode;
+	}
+	public String getTaskDefKey() {
+		return taskDefKey;
+	}
+	public void setTaskDefKey(String taskDefKey) {
+		this.taskDefKey = taskDefKey;
+	}
+	
 	
 }

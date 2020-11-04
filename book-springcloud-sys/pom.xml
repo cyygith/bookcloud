@@ -182,11 +182,11 @@
 	    <artifactId>itextpdf</artifactId>
 	    <version>5.5.11</version>
 	</dependency>
-	<!-- <dependency>
+	<dependency>
 	    <groupId>com.itextpdf</groupId>
 	    <artifactId>itext-asian</artifactId>
 	    <version>5.2.0</version>
-	</dependency> -->
+	</dependency>
 	<dependency>
 	    <groupId>com.itextpdf.tool</groupId>
 	    <artifactId>xmlworker</artifactId>
@@ -197,7 +197,14 @@
 	    <artifactId>flying-saucer-pdf-itext5</artifactId>
 	    <version>9.1.18</version>
 	</dependency>
-	
+	<!-- 20200731 add 以下是如果外部引入的jar包的情况下，在maven中央仓库中没有对应jar的情况下，直接使用下面引入方式 -->
+	<!-- <dependency>
+	    <groupId>com.itextpdf</groupId>
+	    <artifactId>flying-saucer-pdf-itext5</artifactId>
+	    <version>9.1.18</version>
+	    <scope>system</scope>
+	    <systemPath>${project.basedir}/lib/flying-saucer-pdf-itext5-9.1.18.jar</systemPath>
+	</dependency> -->
 	
   </dependencies>
   <build>
@@ -206,11 +213,18 @@
   			<groupId>org.apache.maven.plugins</groupId>
   			<artifactId>maven-jar-plugin</artifactId>
   			<configuration>
+  				<!-- <includeSystemScope>true</includeSystemScope> --><!-- 20200731 add 如果有从外部引入，则需要添加这个 -->
   				<archive>
+  					<!-- <mainfestEntries>
+  						<Class-Path>lib/flying-saucer-core-9.1.18.jar lib/flying-saucer-pdf-itext5-9.1.18.jar lib/itextpdf-5.5.11.jar lib/xmlworker-5.5.11.jar lib/</Class-Path>
+  					</mainfestEntries> -->
   					<manifest>
   						<addClasspath>true</addClasspath>
   						<mainClass>com.elling.book.sys.sysApplication</mainClass>
   						<classpathPrefix>lib/</classpathPrefix>
+  						<!-- 20200731 add 下面是新增的 -->
+  						<!-- <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+  						<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries> -->
   					</manifest>
   				</archive>
   			</configuration>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.elling.book.flowable.dao.TaskQueryDao">
+	<!-- 【我发起的】流程实例查询 -->
 	<select id="getProcessByMyStart" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT DISTINCT
 			P.ID_ AS processInstanceId,
@@ -27,6 +28,18 @@
 			</if>
 			<if test="query.formName!=null and query.formName!=''">
 				AND P.NAME_ LIKE CONCAT('%',#{query.formName},'%')
+			</if>
+			<if test="query.businessId!=null and query.businessId!=''">
+				AND P.BUSINESS_KEY_ = #{query.businessId}
+			</if>
+			<if test="query.startTime!=null and query.startTime!=''">
+				AND P.START_TIME_  >= #{query.startTime}
+			</if>
+			<if test="query.endTime!=null and query.endTime!=''">
+				<![CDATA[AND P.END_TIME_  >= #{query.startTime}]]>
+			</if>
+			<if test="query.tenantId!=null and query.tenantId!=''">
+				AND P.TENANT_ID_ LIKE = #{query.tenantId}
 			</if>
 		</where>
 		ORDER BY startTime DESC
@@ -60,9 +73,22 @@
 				<if test="query.formName!=null and query.formName!=''">
 					AND P.NAME_ LIKE CONCAT('%',#{query.formName},'%')
 				</if>
+				<if test="query.businessId!=null and query.businessId!=''">
+					AND P.BUSINESS_KEY_ = #{query.businessId}
+				</if>
+				<if test="query.startTime!=null and query.startTime!=''">
+					AND P.START_TIME_  >= #{query.startTime}
+				</if>
+				<if test="query.endTime!=null and query.endTime!=''">
+					<![CDATA[AND P.END_TIME_  >= #{query.startTime}]]>
+				</if>
+				<if test="query.tenantId!=null and query.tenantId!=''">
+					AND P.TENANT_ID_ LIKE = #{query.tenantId}
+				</if>
 			</where>
 			) A
 	</select>
+	<!-- 根据用户Id和流程定义ID等条件获取已办列表 -->
 	<select id="getDoneListByCondition" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT DISTINCT
             T.ID_ AS taskId,
@@ -83,13 +109,25 @@
         WHERE
             T.END_TIME_ IS NOT NULL
             <if test="query.userId!=null and query.userId!=''">
-		        AND T.ASSIGNEE_ = #{userId}
+		        AND T.ASSIGNEE_ = #{query.userId}
             </if>
 			<if test="query.processDefId!=null and query.processDefId!=''">
 				AND T.PROC_DEF_ID_ LIKE CONCAT('%',#{query.processDefId},'%')
 			</if>
 			<if test="query.processId!=null and query.processId!=''">
 				AND T.PROC_INST_ID_ LIKE CONCAT('%',#{query.processId},'%')
+			</if>
+			<if test="query.businessId!=null and query.businessId!=''">
+				AND P.BUSINESS_KEY_ = #{query.businessId}
+			</if>
+			<if test="query.startTime!=null and query.startTime!=''">
+				AND P.START_TIME_  >= #{query.startTime}
+			</if>
+			<if test="query.endTime!=null and query.endTime!=''">
+				<![CDATA[AND P.END_TIME_  >= #{query.startTime}]]>
+			</if>
+			<if test="query.tenantId!=null and query.tenantId!=''">
+				AND P.TENANT_ID_ LIKE = #{query.tenantId}
 			</if>
 		ORDER BY startTime DESC
 		limit #{page.start},#{page.limit}
@@ -123,11 +161,24 @@
 				<if test="query.processId!=null and query.processId!=''">
 					AND T.PROC_INST_ID_ LIKE CONCAT('%',#{query.processId},'%')
 				</if>
+				<if test="query.businessId!=null and query.businessId!=''">
+					AND P.BUSINESS_KEY_ = #{query.businessId}
+				</if>
+				<if test="query.startTime!=null and query.startTime!=''">
+					AND P.START_TIME_  >= #{query.startTime}
+				</if>
+				<if test="query.endTime!=null and query.endTime!=''">
+					<![CDATA[AND P.END_TIME_  >= #{query.startTime}]]>
+				</if>
+				<if test="query.tenantId!=null and query.tenantId!=''">
+					AND P.TENANT_ID_ LIKE = #{query.tenantId}
+				</if>
 			) D
 	</select>
 	<select id="getTodoListByUserIdCondition" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT DISTINCT
 			T.ID_ AS taskId,
+			P.NAME_ AS procDefName,
 			T.NAME_ AS taskName,
 			T.FORM_KEY_ AS formKey,
 			E.BUSINESS_KEY_ AS businessId,
@@ -139,22 +190,43 @@
 		FROM
 			ACT_RU_TASK T
 		INNER JOIN ACT_RU_EXECUTION E ON T.PROC_INST_ID_ = E.PROC_INST_ID_
-		LEFT JOIN ACT_RU_IDENTITYLINK I ON I.TASK_ID_ = T.ID_
+		LEFT JOIN ACT_RU_IDENTITYLINK I ON I.TASK_ID_ = T.ID_,
+		ACT_RE_PROCDEF P
 		WHERE
+			T.PROC_DEF_ID_ = P.ID AND
 			E.BUSINESS_KEY_ IS NOT NULL
 			<if test="query.processDefId!=null and query.processDefId!=''">
 				AND T.PROC_DEF_ID_ LIKE CONCAT('%',#{query.processDefId},'%')
+			</if>
+			<if test="query.businessId!=null and query.businessId!=''">
+				AND P.BUSINESS_KEY_ = #{query.businessId}
+			</if>
+			<if test="query.startTime!=null and query.startTime!=''">
+				AND P.START_TIME_  >= #{query.startTime}
+			</if>
+			<if test="query.endTime!=null and query.endTime!=''">
+				<![CDATA[AND P.END_TIME_  >= #{query.startTime}]]>
+			</if>
+			<if test="query.tenantId!=null and query.tenantId!=''">
+				AND P.TENANT_ID_ LIKE = #{query.tenantId}
 			</if>
 			AND (
 				T.ASSIGNEE_ = #{query.userId}
 				OR (
 					T.ASSIGNEE_ IN (
 						SELECT
-							G.GROUP_ID_
+							R.ROLE_CODE
 						FROM
-							ACT_ID_MEMBERSHIP G
+							emaster.SYS_ROLE R,
+							emaster.SYS_USER_ROLE UR,
+							emaster.SYS_USER U
 						WHERE
-							G.USER_ID_ = #{query.userId}
+							R.ROLE_ID = UR.ROLE_ID
+							AND UR.USER_ID = U.USER_ID
+							<if test="query.tenantId!=null and query.tenantId!=''">
+								AND P.TENANT_ID_ LIKE = #{query.tenantId}
+							</if>
+							AND U.USERNAME = #{query.userId}
 					)
 				)
 				OR (
@@ -166,11 +238,18 @@
 						I.USER_ID_ = #{query.userId}
 						OR I.GROUP_ID_ IN (
 							SELECT
-								G.GROUP_ID_
+								R.ROLE_CODE
 							FROM
-								ACT_ID_MEMBERSHIP G
+								emaster.SYS_ROLE R,
+								emaster.SYS_USER_ROLE UR,
+								emaster.SYS_USER U
 							WHERE
-								G.USER_ID_ = #{query.userId}
+								R.ROLE_ID = UR.ROLE_ID
+								AND UR.USER_ID = U.USER_ID
+								<if test="query.tenantId!=null and query.tenantId!=''">
+									AND P.TENANT_ID_ LIKE = #{query.tenantId}
+								</if>
+								AND U.USERNAME = #{query.userId}
 						)
 					)
 				)
@@ -199,16 +278,35 @@
 				<if test="query.processDefId!=null and query.processDefId!=''">
 					AND T.PROC_DEF_ID_ LIKE CONCAT('%',#{query.processDefId},'%')
 				</if>
+				<if test="query.businessId!=null and query.businessId!=''">
+					AND P.BUSINESS_KEY_ = #{query.businessId}
+				</if>
+				<if test="query.startTime!=null and query.startTime!=''">
+					AND P.START_TIME_  >= #{query.startTime}
+				</if>
+				<if test="query.endTime!=null and query.endTime!=''">
+					<![CDATA[AND P.END_TIME_  >= #{query.startTime}]]>
+				</if>
+				<if test="query.tenantId!=null and query.tenantId!=''">
+					AND P.TENANT_ID_ LIKE = #{query.tenantId}
+				</if>
 				AND (
 					T.ASSIGNEE_ = #{query.userId}
 					OR (
 						T.ASSIGNEE_ IN (
 							SELECT
-								G.GROUP_ID_
+								R.ROLE_CODE
 							FROM
-								ACT_ID_MEMBERSHIP G
+								emaster.SYS_ROLE R,
+								emaster.SYS_USER_ROLE UR,
+								emaster.SYS_USER U
 							WHERE
-								G.USER_ID_ = #{query.userId}
+								R.ROLE_ID = UR.ROLE_ID
+								AND UR.USER_ID = U.USER_ID
+								<if test="query.tenantId!=null and query.tenantId!=''">
+									AND P.TENANT_ID_ LIKE = #{query.tenantId}
+								</if>
+								AND U.USERNAME = #{query.userId}
 						)
 					)
 					OR (
@@ -220,11 +318,18 @@
 							I.USER_ID_ = #{query.userId}
 							OR I.GROUP_ID_ IN (
 								SELECT
-									G.GROUP_ID_
+									R.ROLE_CODE
 								FROM
-									ACT_ID_MEMBERSHIP G
+									emaster.SYS_ROLE R,
+									emaster.SYS_USER_ROLE UR,
+									emaster.SYS_USER U
 								WHERE
-									G.USER_ID_ = #{query.userId}
+									R.ROLE_ID = UR.ROLE_ID
+									AND UR.USER_ID = U.USER_ID
+									<if test="query.tenantId!=null and query.tenantId!=''">
+										AND P.TENANT_ID_ LIKE = #{query.tenantId}
+									</if>
+									AND U.USERNAME = #{query.userId}
 							)
 						)
 					)
@@ -241,7 +346,9 @@
 			T.PROC_DEF_ID_ AS procDefId,
 			T.NAME_ AS taskName,
 			T.FORM_KEY_ AS formKey,
-			T.START_TIME_ AS startTime
+			T.START_TIME_ AS startTime,
+			T.ASSIGNEE_ AS assignee,
+			T.TASK_DEF_KEY_ AS taskDefKey
 		FROM
 		 	ACT_HI_TASKINST T
 		WHERE 1=1
@@ -251,6 +358,155 @@
 			<if test="taskId!=null and taskId!=''">
 				AND T.ID_ = #{taskId}
 			</if>
+			<if test="taskDefKey!=null and taskDefKey!=''">
+				AND T.TASK_DEF_KEY_ = #{taskDefKey}
+			</if>
 			ORDER BY T.START_TIME_ DESC
 	</select>
+	
+	<!-- 根据businessId获取当前流程所处任务节点（注该方法不适用于并行网关） -->
+	<select id="getCurrentTaskByBusinessId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT DISTINCT
+			T.ID_ AS taskId,
+			T.NAME_ AS taskName,
+			E.BUSINESS_KEY_AS businessId,
+			E.PROC_INST_ID_ AS processInstanceId,
+			T.ASSIGNEE_ AS assignee,
+			T.CREATE_TIME_ AS startTime
+		FROM 
+			ACT_RU_TASK T
+		INNER JOIN ACT_RU_EXECUTION E ON T.PROC_INST_ID_ = E.PROC_INST_ID_
+		WHERE E.BUSINESS_KEY_ IS NOT NULL
+			AND E.BUSINESS_KEY_ = #{businessId}
+			ORDER BY T.CREATE_TIME_ DESC
+	</select>
+	
+	<!-- 根据角色获取各个人员的工作量 -->
+	<select id="getWorkloadByRolename" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			T.ASSIGNEE_ AS userName,
+			US.NAME AS userNameZh,
+		  COUNT(T.ASSIGNEE_) COUNT
+		FROM
+			ACT_RU_TASK T,
+			emaster.SYS_USER US
+		WHERE
+			T.ASSIGNEE_ = US.USERNAME
+		AND T.ASSIGNEE_ IN (
+			SELECT
+				U.USERNAME
+			FROM
+				emaster.sys_role R,
+				emaster.sys_user_role UR,
+				emaster.sys_user U
+			WHERE
+				R.ROLE_ID = UR.ROLE_ID
+			AND UR.USER_ID = U.USER_ID
+			AND R.ROLE_CODE = #{roleCode}
+		)
+		GROUP BY
+			T.ASSIGNEE_,
+			US. NAME
+	</select>
+	<!-- 根据processId获取已办列表信息 ACT_HI_TASKINST -->
+	<select id="getActHiTaskinstListByProcessId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			T.ID_ AS taskId,
+			T.TASK_DEF_ID_ AS taskDefId,
+			T.PROC_INST_ID_ AS processId,
+			T.START_TIME_ AS startTime,
+			T.ASSIGNEE_ AS assignee,
+			T.TENANT_ID_ AS systemSn
+		FROM
+			act_hi_taskinst T
+		WHERE
+			T.PROC_DEF_ID_ = #{processId}
+	</select>
+	<!-- 根据业务编号查询流程所处节点 -->
+	<select id="getFlowInfoByCondition" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT DISTINCT
+			T.ID_ AS taskId,
+			P.NAME_ AS procDefName,
+			T.NAME_ AS taskName,
+			E.BUSINESS_KEY_ AS businessId,
+			E.PROC_INST_ID_ AS processInstanceId,
+			T.FORM_KEY_ AS formKey,
+			DATE_FORMAT(T.CREATE_TIME_,'%Y-%m-%d %H:%i:%S') AS startTime,
+			T.ASSIGNEE_ AS assignee,
+			E.NAME_ AS formName,
+			E.TENANT_ID_ AS systemSn
+		FROM
+			ACT_RU_TASK T
+		INNER JOIN ACT_RU_EXECUTION E ON T.PROC_INST_ID_ = E.PROC_INST_ID_
+		LEFT JOIN ACT_RU_IDENTITYLINK I ON I.TASK_ID_ = T.ID_,
+		 ACT_RE_PROCDEF P
+		WHERE
+			T.PROC_DEF_ID_ = P.ID_
+		AND E.BUSINESS_KEY_ IS NOT NULL
+		<if test="query.processDefId!=null and query.processDefId!=''">
+			AND T.PROC_DEF_ID_ LIKE CONCAT(#{query。processDefId},'%')
+		</if>
+		<if test="query.businessId!=null and query.businessId!=''">
+			AND E.BUSINESS_KEY_ = #{query.businessId}
+		</if>
+		<if test="query.startTime!=null and query.startTime!=''">
+			AND T.START_TIME_  >= #{query.startTime}
+		</if>
+		<if test="query.endTime!=null and query.endTime!=''">
+			<![CDATA[AND T.END_TIME_  >= #{query.startTime}]]>
+		</if>
+		AND T.TENANT_ID_ = #{QUERY.tenantId}
+		ORDER BY startTime DESC
+		limit #{page.start},#{page.limit}
+	</select>
+	<!-- 根据业务编号查询流程所处节点 -->
+	<select id="getFlowInfoByConditionCount" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT COUNT(1) FROM (
+			SELECT DISTINCT
+				T.ID_ AS taskId,
+				P.NAME_ AS procDefName,
+				T.NAME_ AS taskName,
+				E.BUSINESS_KEY_ AS businessId,
+				E.PROC_INST_ID_ AS processInstanceId,
+				T.FORM_KEY_ AS formKey,
+				DATE_FORMAT(T.CREATE_TIME_,'%Y-%m-%d %H:%i:%S') AS startTime,
+				T.ASSIGNEE_ AS assignee,
+				E.NAME_ AS formName,
+				E.TENANT_ID_ AS systemSn
+			FROM
+				ACT_RU_TASK T
+			INNER JOIN ACT_RU_EXECUTION E ON T.PROC_INST_ID_ = E.PROC_INST_ID_
+			LEFT JOIN ACT_RU_IDENTITYLINK I ON I.TASK_ID_ = T.ID_,
+			 ACT_RE_PROCDEF P
+			WHERE
+				T.PROC_DEF_ID_ = P.ID_
+			AND E.BUSINESS_KEY_ IS NOT NULL
+			<if test="query.processDefId!=null and query.processDefId!=''">
+				AND T.PROC_DEF_ID_ LIKE CONCAT(#{query。processDefId},'%')
+			</if>
+			<if test="query.businessId!=null and query.businessId!=''">
+				AND E.BUSINESS_KEY_ = #{query.businessId}
+			</if>
+			<if test="query.startTime!=null and query.startTime!=''">
+				AND T.START_TIME_  >= #{query.startTime}
+			</if>
+			<if test="query.endTime!=null and query.endTime!=''">
+				<![CDATA[AND T.END_TIME_  >= #{query.startTime}]]>
+			</if>
+			AND T.TENANT_ID_ = #{QUERY.tenantId}
+			ORDER BY startTime DESC
+		) D
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 </mapper>

@@ -65,7 +65,7 @@ public class MapperXmlGenerator extends CodeManager implements ICode{
 
 	@Override
 	public Map<String, Object> getInitData(Map<String, Object> pmap) {
-		Map<String, Object> data = new HashMap<>();
+		Map<String, Object> data = new HashMap<String, Object>();
 		ToolGenCode toolGenCode = (ToolGenCode)pmap.get("toolGenCode");
 		String tableName = pmap.get("tableName")+"";
 		String schema = toolGenCode.getJdbcSchema();

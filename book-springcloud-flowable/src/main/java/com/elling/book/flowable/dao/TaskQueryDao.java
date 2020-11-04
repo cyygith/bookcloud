@@ -39,10 +39,52 @@ public interface TaskQueryDao {
 	 */
 	public List getTodoListByUserIdCondition(@Param("page") Page page,@Param("query") TaskQuery taskQuery);
 	public Integer getTodoListByUserIdConditionCount(@Param("query") TaskQuery taskQuery);
+	
+	/**
+	 *根据businessId获取当前流程所处任务节点（注该方法不适用于并行网关）
+	 * @param taskQuery
+	 * @return
+	 */
+	public List<Map<String,Object>> getCurrentTaskByBusinessId(TaskQuery taskQuery);
+	
 	/**
 	 * 获取ACT_HI_TASKIINST中的内容
 	 * @param taskQuery
 	 * @return
 	 */
 	public List<Map<String,Object>> getActHiTaskinstByCondition(TaskQuery taskQuery);
+	
+	/**
+	 * 根据角色获取各个人员的工作量
+	 * @param taskQuery
+	 * @return
+	 */
+	public List<Map<String,Object>> getWorkloadByRolename(TaskQuery taskQuery);
+	
+	
+	/**
+	 * 根据processId获取已办任务节点信息
+	 * @param taskQuery
+	 * @return
+	 */
+	public List<Map<String,Object>> getActHiTaskinstListByProcessId(TaskQuery taskQuery);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

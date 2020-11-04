@@ -16,7 +16,7 @@ import com.elling.book.sys.tool.model.ToolGenCode;
 import freemarker.template.Configuration;
 
 /**
- * Service 和  ServiceImpl生成
+ * Service 鍜�  ServiceImpl鐢熸垚
  * @author cyy
  *
  */
@@ -35,7 +35,7 @@ public class ServiceGenerator extends CodeManager implements ICode{
 		String customMapping = "/";
 		String modelNameUpperCamel = StringUtils.isNullOrEmpty(modelName) ? CodeUtils.tableNameConvertUpperCamel(tableName) : modelName;
 		
-		//初始化数据
+		//鍒濆鍖栨暟鎹�
 		Map<String,Object> pMap = new HashMap<String,Object>();
 		pMap.put("modelName", modelName);
 		pMap.put("sign", sign);
@@ -46,32 +46,32 @@ public class ServiceGenerator extends CodeManager implements ICode{
 		try {
 			String javaPath = toolGenCode.getJavaPath();
 			
-			// 创建 Service 接口
+			// 鍒涘缓 Service 鎺ュ彛
 			String servicePath = PROJECT_PATH + javaPath +CodeUtils.packageConvertPath(toolGenCode.getServicePackage());
 			File serviceFile = new File(servicePath + customMapping + modelNameUpperCamel + "Service.java");
-			// 查看父级目录是否存在, 不存在则创建
+			// 鏌ョ湅鐖剁骇鐩綍鏄惁瀛樺湪, 涓嶅瓨鍦ㄥ垯鍒涘缓
 			if (!serviceFile.getParentFile().exists()) {
 				serviceFile.getParentFile().mkdirs();
 			}
 			cfg.getTemplate("service.ftl").process(data, new FileWriter(serviceFile));
-			logger.info(modelNameUpperCamel + "Service.java 生成成功!");
-			returnMsg.append(modelNameUpperCamel + "Service.java 生成成功!");
+			logger.info(modelNameUpperCamel + "Service.java 鐢熸垚鎴愬姛!");
+			returnMsg.append(modelNameUpperCamel + "Service.java 鐢熸垚鎴愬姛!");
 			
-			// 创建 Service 接口的实现类
+			// 鍒涘缓 Service 鎺ュ彛鐨勫疄鐜扮被
 			String serviceImplPath = PROJECT_PATH+javaPath+CodeUtils.packageConvertPath(toolGenCode.getServiceImplPackage());
 			File serviceImplFile = new File(serviceImplPath + customMapping + modelNameUpperCamel + "ServiceImpl.java");
-			// 查看父级目录是否存在, 不存在则创建
+			// 鏌ョ湅鐖剁骇鐩綍鏄惁瀛樺湪, 涓嶅瓨鍦ㄥ垯鍒涘缓
 			if (!serviceImplFile.getParentFile().exists()) {
 				serviceImplFile.getParentFile().mkdirs();
 			}
 			cfg.getTemplate("service-impl.ftl").process(data, new FileWriter(serviceImplFile));
-			logger.info(modelNameUpperCamel + "ServiceImpl.java 生成成功!");
-			returnMsg.append(" "+modelNameUpperCamel + "ServiceImpl.java 生成成功");
+			logger.info(modelNameUpperCamel + "ServiceImpl.java 鐢熸垚鎴愬姛!");
+			returnMsg.append(" "+modelNameUpperCamel + "ServiceImpl.java 鐢熸垚鎴愬姛");
 		} catch (Exception e) {
-			returnMsg.append("Service 生成失败");
-			logger.error("Service 生成失败");
+			returnMsg.append("Service 鐢熸垚澶辫触");
+			logger.error("Service 鐢熸垚澶辫触");
 			e.printStackTrace();
-//			throw new RuntimeException("Service 生成失败!", e);
+//			throw new RuntimeException("Service 鐢熸垚澶辫触!", e);
 		}
 		
 		return returnMsg.toString();
@@ -79,7 +79,7 @@ public class ServiceGenerator extends CodeManager implements ICode{
 
 	@Override
 	public Map<String, Object> getInitData(Map<String,Object> map) {
-		Map<String, Object> data = new HashMap<>();
+		Map<String, Object> data = new HashMap<String, Object>();
 		ToolGenCode toolGenCode = (ToolGenCode)map.get("toolGenCode");
 		data.put("date", DateUtil.getNowTime());
 		data.put("author", toolGenCode.getAuthor());

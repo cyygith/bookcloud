@@ -1,5 +1,7 @@
 package com.elling.book.flowable.controller;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.flowable.bpmn.model.UserTask;
@@ -61,8 +63,8 @@ public class FlowableProcessController {
     		return Result.success();
     	}catch(Exception e) {
     		e.printStackTrace();
-    		logger.error(e.getMessage());
-    		return Result.error(e.getMessage());
+    		logger.error("程序出错，请联系管理员处理"+e.getMessage());
+    		return Result.error("程序出错，请联系管理员处理"+e.getMessage());
     	}
 	}
 	
@@ -100,8 +102,44 @@ public class FlowableProcessController {
     		return Result.success(processId);
     	}catch(Exception e) {
     		e.printStackTrace();
-    		logger.error(e.getMessage());
-    		return Result.error(e.getMessage());
+    		logger.error("程序出错，请联系管理员处理"+e.getMessage());
+    		return Result.error("程序出错，请联系管理员处理"+e.getMessage());
+    	}
+    }
+    
+    /**
+	 * 获取下个节点相关信息
+	 * @param parmMap
+	 * 参数包含如下：
+	 * {
+	 * 	taskId,	
+	 *  xxx:xxx				//其它流程中需要的参数（选择性）
+	 *  ....
+	 * }
+	 * @return   taskId   //任务ID
+	 */
+    @RequestMapping(value = "startProcessAndSubmit")
+    public Result getNextUserTask(@RequestBody Map<String,Object> parmMap) {
+    	
+    	try {
+    		String taskId = MyStringUtil.getString(parmMap.get("taskId"));
+    		if(MyStringUtil.isNullOrEmpty(taskId)) {
+    			return Result.error("【taskId不能为空】");
+    		}
+    		
+    		UserTask task = nextTaskService.getNextTaskFlowable("next", taskId);
+    		Map returnMap = new HashMap();
+    		returnMap.put("taskName", task.getName());//节点名称
+    		List candidateGroup = task.getCandidateGroups();
+    		List candidateUser = task.getCandidateUsers();
+    		returnMap.put("candidateGroup", candidateGroup);
+    		returnMap.put("candidateUser", candidateUser);
+    		
+    		return Result.success(returnMap);
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    		logger.error("获取失败，请联系管理员处理"+e.getMessage());
+    		return Result.error("获取失败，请联系管理员处理"+e.getMessage());
     	}
     }
     
@@ -132,8 +170,8 @@ public class FlowableProcessController {
     		return Result.success();
     	}catch(Exception e) {
     		e.printStackTrace();
-    		logger.error(e.getMessage());
-    		return Result.error(e.getMessage());
+    		logger.error("获取失败，请联系管理员处理"+e.getMessage());
+    		return Result.error("获取失败，请联系管理员处理"+e.getMessage());
     	}
     }
     /**
@@ -163,8 +201,8 @@ public class FlowableProcessController {
     		return Result.success();
     	}catch(Exception e) {
     		e.printStackTrace();
-    		logger.error(e.getMessage());
-    		return Result.error(e.getMessage());
+    		logger.error("程序出错，请联系管理员处理"+e.getMessage());
+    		return Result.error("程序出错，请联系管理员处理"+e.getMessage());
     	}
     }
     
@@ -188,8 +226,8 @@ public class FlowableProcessController {
     		return Result.success(task);
     	}catch(Exception e) {
     		e.printStackTrace();
-    		logger.error(e.getMessage());
-    		return Result.error(e.getMessage());
+    		logger.error("程序出错，请联系管理员处理"+e.getMessage());
+    		return Result.error("程序出错，请联系管理员处理"+e.getMessage());
     	}
     }
     
@@ -220,8 +258,8 @@ public class FlowableProcessController {
     		return Result.success();
     	}catch(Exception e) {
     		e.printStackTrace();
-    		logger.error(e.getMessage());
-    		return Result.error(e.getMessage());
+    		logger.error("程序出错，请联系管理员处理"+e.getMessage());
+    		return Result.error("程序出错，请联系管理员处理"+e.getMessage());
     	}
     }
     /**
@@ -245,8 +283,8 @@ public class FlowableProcessController {
     		return Result.success();
     	}catch(Exception e) {
     		e.printStackTrace();
-    		logger.error(e.getMessage());
-    		return Result.error(e.getMessage());
+    		logger.error("程序出错，请联系管理员处理"+e.getMessage());
+    		return Result.error("程序出错，请联系管理员处理"+e.getMessage());
     	}
     }
     
@@ -266,8 +304,35 @@ public class FlowableProcessController {
     		return Result.success();
     	}catch(Exception e) {
     		e.printStackTrace();
-    		logger.error(e.getMessage());
-    		return Result.error(e.getMessage());
+    		logger.error("程序出错，请联系管理员处理"+e.getMessage());
+    		return Result.error("程序出错，请联系管理员处理"+e.getMessage());
+    	}
+    }
+    
+    
+    /**
+	 * 退回首个节点
+	 * @param parmMap
+	 *  processId:xxx,			//流程实例ID（必须）
+	 *  taskId:xxx,				//任务ID（必须）
+	 *  currTaskKeys:xxx,		//驳回发起的当前节点key 为  act_ru_task 中TASK_DEF_KEY_ 字段的值
+	 *  targetKey:xxx,  		//目标节点的key  为act_hi_taskinst 中 TASK_DEF_KEY_
+	 */
+    @RequestMapping(value = "rollBackToFirstTask")
+    public Result rollBackToFirstTask(@RequestBody TaskQuery taskQuery) {
+    	try {
+    		if(MyStringUtil.isNullOrEmpty(taskQuery.getProcessId())) {
+    			return Result.error("【processId不能为空】");
+    		}
+    		if(MyStringUtil.isNullOrEmpty(taskQuery.getTaskId())) {
+    			return Result.error("【taskId 不能为空】");
+    		}
+    		flowableTaskService.backToFirstTask(taskQuery);
+    		return Result.success();
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    		logger.error("退回上一个节点失败："+e.getMessage());
+    		return Result.error("退回上一个节点失败："+e.getMessage());
     	}
     }
 }

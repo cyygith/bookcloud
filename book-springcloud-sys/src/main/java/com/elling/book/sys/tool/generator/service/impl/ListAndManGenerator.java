@@ -41,27 +41,27 @@ public class ListAndManGenerator extends CodeManager implements ICode{
 		map.put("toolGenCode", toolGenCode);
 		Map<String, Object> data = getInitData(map);
 		try {
-			// 创建 list 页面
+			// 鍒涘缓 list 椤甸潰
 			File listFile = new File(PROJECT_PATH + PAGE_PATH + customMapping + modelNameLowerCamel + "List.vue");
-			// 查看父级目录是否存在, 不存在则创建
+			// 鏌ョ湅鐖剁骇鐩綍鏄惁瀛樺湪, 涓嶅瓨鍦ㄥ垯鍒涘缓
 			if (!listFile.getParentFile().exists()) {
 				listFile.getParentFile().mkdirs();
 			}
 			cfg.getTemplate("List.ftl").process(data, new FileWriter(listFile));
-			logger.info (modelNameLowerCamel+ "List.vue 生成成功!");
+			logger.info (modelNameLowerCamel+ "List.vue 鐢熸垚鎴愬姛!");
 			
-			// 创建 Manager 页面
+			// 鍒涘缓 Manager 椤甸潰
 			File ManagerFile = new File(PROJECT_PATH + PAGE_PATH + customMapping + modelNameLowerCamel + "Manager.vue");
-			// 查看父级目录是否存在, 不存在则创建
+			// 鏌ョ湅鐖剁骇鐩綍鏄惁瀛樺湪, 涓嶅瓨鍦ㄥ垯鍒涘缓
 			if (!ManagerFile.getParentFile().exists()) {
 				ManagerFile.getParentFile().mkdirs();
 			}
 			cfg.getTemplate("manager.ftl").process(data, new FileWriter(ManagerFile));
-			logger.info (modelNameLowerCamel+ "manager.vue 生成成功!");
-			returnMsg.append(modelNameLowerCamel+ "manager.vue 生成成功!");
+			logger.info (modelNameLowerCamel+ "manager.vue 鐢熸垚鎴愬姛!");
+			returnMsg.append(modelNameLowerCamel+ "manager.vue 鐢熸垚鎴愬姛!");
 		} catch (Exception e) {
-//			throw new RuntimeException("vue 生成失败!", e);
-			returnMsg.append(modelNameLowerCamel+"manager.vue 生成失败!");
+//			throw new RuntimeException("vue 鐢熸垚澶辫触!", e);
+			returnMsg.append(modelNameLowerCamel+"manager.vue 鐢熸垚澶辫触!");
 			e.printStackTrace();
 		}
 		
@@ -70,7 +70,7 @@ public class ListAndManGenerator extends CodeManager implements ICode{
 
 	@Override
 	public Map<String, Object> getInitData(Map<String, Object> pmap) {
-		Map<String, Object> data = new HashMap<>();
+		Map<String, Object> data = new HashMap<String, Object>();
 		ToolGenCode toolGenCode = (ToolGenCode)pmap.get("toolGenCode");
 		String tableName = pmap.get("tableName")+"";
 		String schema = toolGenCode.getJdbcSchema();;
@@ -87,7 +87,7 @@ public class ListAndManGenerator extends CodeManager implements ICode{
 		map.put("schema", schema);
 		
 		QueryMysqlTable query = new QueryMysqlTable();
-		String sql = "select t.COLUMN_NAME,t.COLUMN_COMMENT,t.COLUMN_KEY,T.DATA_TYPE from information_schema.`COLUMNS` t where t.TABLE_NAME = '"+tableName+"' AND t.TABLE_SCHEMA='"+schema+"'";    //要执行的SQL
+		String sql = "select t.COLUMN_NAME,t.COLUMN_COMMENT,t.COLUMN_KEY,T.DATA_TYPE from information_schema.`COLUMNS` t where t.TABLE_NAME = '"+tableName+"' AND t.TABLE_SCHEMA='"+schema+"'";    //瑕佹墽琛岀殑SQL
 		String[] arr = new String[] {null};
 		List<Map<String,Object>> list = query.getBySql(sql, null);
 		List<TableColEntity> colList = new ArrayList<TableColEntity>();
@@ -103,10 +103,10 @@ public class ListAndManGenerator extends CodeManager implements ICode{
 				data.put("primaryKey", CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, tMap.get("COLUMN_NAME")+""));
 			}
 			/**
-        	 * .设置处理类型,如果包含time的话则显示time，
-        	 * .如果是status,则显示select类型，以后可以规范一下，下拉框如何设置，这里手动写
-        	 * .如果是...可以设置为radio类型
-        	 * .其他的默认为text类型
+        	 * .璁剧疆澶勭悊绫诲瀷,濡傛灉鍖呭惈time鐨勮瘽鍒欐樉绀簍ime锛�
+        	 * .濡傛灉鏄痵tatus,鍒欐樉绀簊elect绫诲瀷锛屼互鍚庡彲浠ヨ鑼冧竴涓嬶紝涓嬫媺妗嗗浣曡缃紝杩欓噷鎵嬪姩鍐�
+        	 * .濡傛灉鏄�...鍙互璁剧疆涓簉adio绫诲瀷
+        	 * .鍏朵粬鐨勯粯璁や负text绫诲瀷
         	 */
 			String colunm = tMap.get("COLUMN_NAME")+"";
         	if(colunm.toLowerCase().contains("time")) {
